@@ -1,0 +1,24 @@
+<div class="fixed inset-0 bg-black/60 z-[60] flex items-center justify-center p-4" (click)="onClose()">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl h-[80vh] flex flex-col overflow-hidden animate-fade-in" (click)="$event.stopPropagation()">
+    <header class="p-4 border-b flex justify-between items-center flex-shrink-0">
+      <h3 class="text-xl font-bold text-gray-800">Actividades para {{ trip().titulo }}</h3>
+      <button (click)="onClose()" class="text-gray-400 hover:text-gray-700">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </header>
+    <main class="flex-grow relative bg-blue-50 overflow-hidden">
+      <div #mapContainer class="w-full h-full"></div>
+    </main>
+  </div>
+</div>
+<style>
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  .animate-fade-in {
+    animation: fade-in 0.2s ease-out forwards;
+  }
+</style>

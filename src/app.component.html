@@ -1,0 +1,22 @@
+<div class="h-screen w-screen flex flex-col">
+  <main class="flex-grow overflow-y-auto pb-24">
+    @switch (activeView()) {
+      @case ('map') {
+        <app-map-view (tripSelected)="onTripSelectedFromMap($event)" />
+      }
+      @case ('feed') {
+        <app-feed-view (editTrip)="onEditTrip($event)" />
+      }
+    }
+  </main>
+
+  <app-bottom-nav 
+    (viewChange)="onViewChange($event)"
+    (createTrip)="onShowCreator()" />
+
+  @if(creatorState().mode !== 'hidden') {
+    <app-trip-creator 
+      [tripToEdit]="creatorState().trip"
+      (close)="onCloseCreator()" />
+  }
+</div>

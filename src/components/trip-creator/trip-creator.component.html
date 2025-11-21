@@ -1,0 +1,76 @@
+<div class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center" (click)="closeCreator()">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md m-4 p-6 relative animate-fade-in-up" (click)="$event.stopPropagation()">
+    
+    <button (click)="closeCreator()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+    
+    <h2 class="text-2xl font-bold text-gray-900 mb-6">
+      {{ isEditMode ? 'Editar Viaje' : 'Crea tu Próximo Viaje' }}
+    </h2>
+    
+    @if (!isGeminiConfigured()) {
+      <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50" role="alert">
+        <span class="font-medium">Error de Configuración:</span> La clave de API de Gemini no está configurada. La aplicación no puede generar viajes.
+      </div>
+    } @else {
+      <form (ngSubmit)="handleSubmit()" class="space-y-6">
+      
+        <div>
+          <label for="location" class="block text-sm font-medium text-gray-700 mb-1">Destino</label>
+          <input type="text" id="location" name="location" [(ngModel)]="tripDetails.location" placeholder="Ej: París, Francia" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+        </div>
+
+        <div>
+          <label for="days" class="block text-sm font-medium text-gray-700 mb-1">Número de Días</label>
+          <input type="number" id="days" name="days" [(ngModel)]="tripDetails.days" min="1" max="14" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+        </div>
+
+        <div>
+          <label for="budget" class="block text-sm font-medium text-gray-700 mb-1">Presupuesto</label>
+          <select id="budget" name="budget" [(ngModel)]="tripDetails.budget" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white">
+            <option value="Bajo">Bajo</option>
+            <option value="Medio">Medio</option>
+            <option value="Alto">Alto</option>
+          </select>
+        </div>
+
+        @if (error()) {
+          <div class="p-4 my-4 text-sm text-red-800 rounded-lg bg-red-50" role="alert">
+            <span class="font-medium">¡Error!</span> {{ error() }}
+          </div>
+        }
+
+        <button type="submit" [disabled]="!isFormValid() || isLoading()" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center">
+          @if (isLoading()) {
+            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span>{{ isEditMode ? 'Actualizando...' : 'Generando...' }}</span>
+          } @else {
+            <span>{{ isEditMode ? 'Actualizar Viaje' : 'Generar Viaje con IA' }}</span>
+          }
+        </button>
+      </form>
+    }
+  </div>
+</div>
+
+<style>
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .animate-fade-in-up {
+    animation: fade-in-up 0.3s ease-out forwards;
+  }
+</style>

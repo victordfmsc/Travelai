@@ -1,0 +1,5 @@
+{
+  "name": "AI Travel Planner",
+  "description": "An application that uses AI to generate personalized travel itineraries based on location, duration, and budget. It features a map view to visualize trips and a social-style feed to browse them.",
+  "requestFramePermissions": []
+}

@@ -1,0 +1,52 @@
+<div class="relative w-full h-full">
+  <!-- Map container -->
+  <div #mapContainer class="w-full h-full"></div>
+
+  <!-- Filter UI -->
+  <div class="absolute top-4 left-1/2 -translate-x-1/2 z-10 bg-white/80 backdrop-blur-sm rounded-lg shadow-lg p-1.5 flex items-center space-x-2">
+    <span class="text-sm font-semibold text-gray-700 px-2">Presupuesto:</span>
+    @for(budget of budgetOptions; track budget) {
+      <button 
+        (click)="setBudgetFilter(budget)"
+        class="px-3 py-1.5 text-sm font-medium rounded-md transition-colors"
+        [class.bg-blue-600]="budgetFilter() === budget"
+        [class.text-white]="budgetFilter() === budget"
+        [class.bg-white]="budgetFilter() !== budget"
+        [class.text-gray-600]="budgetFilter() !== budget"
+        [class.hover:bg-gray-100]="budgetFilter() !== budget"
+      >
+        {{ budget }}
+      </button>
+    }
+  </div>
+
+  @if (isLoading() && filteredTrips().length === 0) {
+    <div class="absolute inset-0 flex items-center justify-center bg-white/30 backdrop-blur-sm z-10">
+      <div class="flex flex-col items-center text-center p-6">
+        <svg class="animate-spin h-10 w-10 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <p class="mt-4 text-lg font-semibold text-gray-700">Generando tu primer viaje...</p>
+        <p class="text-sm text-gray-500">La IA está creando una aventura única para ti.</p>
+      </div>
+    </div>
+  } @else if (filteredTrips().length === 0) {
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center p-6 bg-white/80 backdrop-blur-sm rounded-lg shadow-lg">
+      <h2 class="text-lg font-semibold text-gray-700">
+        @if(budgetFilter() === 'Todos') {
+          El mapa está vacío
+        } @else {
+          No hay viajes con presupuesto '{{ budgetFilter() }}'
+        }
+      </h2>
+      <p class="mt-1 text-gray-500 text-sm">
+        @if(budgetFilter() === 'Todos') {
+          Crea un viaje para verlo aquí.
+        } @else {
+          Prueba con otro filtro.
+        }
+      </p>
+    </div>
+  }
+</div>
